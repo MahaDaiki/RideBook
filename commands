@@ -1,0 +1,10 @@
+php artisan migrate fresh
+
+php artisan make:seeder RolesSeeder
+
+php artisan db:seed --class=RolesSeeder
+
+composer require spatie/laravel-permission
+composer dump-autoload
+
+
