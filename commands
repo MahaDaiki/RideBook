@@ -7,4 +7,5 @@ php artisan db:seed --class=RolesSeeder
 composer require spatie/laravel-permission
 composer dump-autoload
 
+php artisan make:model Passenger --resource
 

@@ -14,12 +14,7 @@ return new class extends Migration
         Schema::create('schedule', function (Blueprint $table) {
             $table->id();
             $table->date('date');
-            $table->unsignedBigInteger('route_id');
             $table->timestamps();
-            $table->foreign('route_id')
-            ->references('id')
-            ->on('routes');
-          
         });
     }
 

@@ -19,7 +19,6 @@ return new class extends Migration
             $table->string('phonenumber')->unique();
             $table->string('password');
             $table->string('profilepicture');
-            $table->boolean('isHidden')->default(0);
             $table->rememberToken();
             $table->timestamps();
         });

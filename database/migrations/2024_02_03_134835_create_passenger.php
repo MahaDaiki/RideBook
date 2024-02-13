@@ -11,22 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('rating', function (Blueprint $table) {
+        Schema::create('passenger', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('passenger_id');
-            $table->unsignedBigInteger('reservation_id');
-            $table->integer('Value');
-            $table->string('Feedback');
+            $table->boolean('isHidden')->default(0);
             $table->timestamps();
-
             $table->foreign('passenger_id')
             ->references('id')
             ->on('users')
             ->where('role', 'passenger');
-
-            $table->foreign('reservation_id')
-            ->references('id')
-            ->on('reservation');
         });
     }
 
@@ -35,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('rating');
+        Schema::dropIfExists('passenger');
     }
 };

@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Driver;
+use App\Models\Passenger;
+use App\Models\Taxi;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
@@ -12,6 +15,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
+use Spatie\Permission\Models\Role;
 
 class RegisteredUserController extends Controller
 {
@@ -20,7 +24,8 @@ class RegisteredUserController extends Controller
      */
     public function create(): View
     {
-        return view('auth.register');
+        $roles = Role::where('id', '<>', 2)->get();
+        return view('auth.register', compact('roles'));
     }
 
     /**
@@ -28,31 +33,18 @@ class RegisteredUserController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
+   
     public function store(Request $request): RedirectResponse
     {
+        $roles = Role::where('id', '<>', 2)->get();
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'profilepicture' => ['required', 'image', 'max:2048'], // Adjust the max file size as needed
+            'profilepicture' => ['required', 'image', 'max:2048'], 
             'phonenumber' => ['required', 'numeric'],
-            'role' => ['required', 'in:passenger,driver'],
+            'role' => ['required', 'in:' . $roles->pluck('name')->implode(',')],
         ]);
-    
-        $role = $request->input('role');
-        $additionalFields = [];
-    
-        if ($role === 'driver') {
-            $request->validate([
-                'Description' => ['required', 'string'],
-                'Payment' => ['required', 'in:cash,card'],
-            ]);
-    
-            $additionalFields = [
-                'Description' => $request->input('Description'),
-                'Payment' => $request->input('Payment'),
-            ];
-        }
     
         $user = User::create([
             'name' => $request->input('name'),
@@ -60,17 +52,66 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->input('password')),
             'profilepicture' => $request->file('profilepicture')->store('app/public/Images', 'public'), 
             'phonenumber' => $request->input('phonenumber'),
+        ]);
+    
+        $role = $request->input('role');
+        $user->assignRole($role); 
+    
+        if ($role === 'driver') {
+            return redirect('/driver-details/' . $user->id)->with('success', 'Driver registration successful! Provide additional details.');
+        }
+       
+        else {
            
-            'Description' => $additionalFields['Description'] ?? null,
-            'Payment' => $additionalFields['Payment'] ?? null,
-        ] + $additionalFields); 
-    
-        $user->assignRole($role);
-
+                Passenger::create(['passenger_id' => $user->id]);
             
-        return redirect()->route('login')->with('success', 'Registration successful! You can now log in.');
-    }
     
+            return redirect()->route('login')->with('success', ucfirst($role) . 'Passenger registration successful! You can now log in.');}
 
     }
+//     public function dumpUserWithRoles($userId)
+// {
+//     $user = User::findOrFail($userId);
+//     $roles = $user->getRoleNames();
+//     dd([
+//         'user' => $user,
+//         'roles' => $roles,
+       
+//     ]);
+// }
+    public function showForm($id)
+{
+    return view('Auth.driver-details', ['userId' => $id]);
+}
 
+public function storeDetails(Request $request)
+{
+    
+    $request->validate([
+        'driver_id' => ['required', 'exists:users,id'], 
+        'Description' => ['required', 'string'],
+        'Payment' => ['required', 'in:cash,card'],
+        'vehicle_platenumber' => ['required', 'string', 'max:255'],
+        'vehicle_type' => ['required', 'string', 'max:255'],
+    ]);
+
+    // dd($request);
+    $taxi = new Taxi([
+        'Vehicle_Platenumber' => $request->input('vehicle_platenumber'),
+        'Vehicle_Type' => $request->input('vehicle_type'),
+    ]);
+
+    $taxi->save();
+    $driver = Driver::firstOrNew(['driver_id' => $request->input('driver_id')]);
+    $driver->description = $request->input('Description');
+    $driver->payment = $request->input('Payment');
+    $driver->driver_id = $request->input('driver_id');
+    $driver->taxi_id = $taxi->id;
+
+    $driver->save();
+   
+    return redirect()->route('login')->with('success', ' registration successful! You can now log in.');
+   
+    } 
+    // view('auth.login', compact('driver'));
+}

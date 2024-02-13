@@ -25,9 +25,6 @@ class User extends Authenticatable
         'password',
         'phonenumber',
         'profilepicture',
-        'Description',
-        'Payment',
-        'isAvailable',
         'ishidden',
 
     ];
@@ -51,4 +48,21 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+    
+    public function driver()
+    {
+        return $this->hasOne(Driver::class);
+    }
+
+    public function passenger()
+    {
+        
+        return $this->hasOne(Passenger::class);
+    }
+
+    public function admin()
+    {
+       
+        return $this->hasOne(Admin::class);
+    }
 }

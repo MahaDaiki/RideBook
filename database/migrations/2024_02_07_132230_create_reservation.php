@@ -16,22 +16,19 @@ return new class extends Migration
             $table->date('Date');
             $table->integer('Available_Seats');
             $table->integer('price');
+            $table->integer('Value');
+            $table->string('Feedback');
             $table->boolean('isHidden')->default(0);
             $table->unsignedBigInteger('passenger_id');
-            $table->unsignedBigInteger('schedule_id');
-            $table->unsignedBigInteger('driver_id');
+            $table->unsignedBigInteger('driver_schedule_id');
             $table->timestamps();
             $table->foreign('passenger_id')
             ->references('id')
-            ->on('users')
-            ->where('role', 'passenger');
-            $table->foreign('schedule_id')
+            ->on('passenger');
+            $table->foreign('driver_schedule_id')
             ->references('id')
-            ->on('schedule');
-            $table->foreign('driver_id')
-            ->references('id')
-            ->on('driver');
-            
+            ->on('driver_schedule');
+          
 
            
         });
