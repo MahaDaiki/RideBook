@@ -19,8 +19,8 @@ return new class extends Migration
             $table->unsignedBigInteger('taxi_id');
             $table->unsignedBigInteger('route_id')->nullable();
             $table->enum('isAvailable', ['Available', 'unavailable', 'Driving'])->default('Available'); 
-            $table->boolean('isHidden')->default(0);
             $table->timestamps();
+            $table->softDeletes();
             $table->foreign('driver_id')
             ->references('id')
             ->on('users')

@@ -15,6 +15,6 @@ class Passenger extends Model
 
     ];
     public function user(){
-        return $this->belongsTp(User::class,'passenger_id');
+        return $this->belongsTo(User::class,'passenger_id');
     }
 }

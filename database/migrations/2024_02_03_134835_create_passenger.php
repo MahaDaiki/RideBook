@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('passenger', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('passenger_id');
-            $table->boolean('isHidden')->default(0);
             $table->timestamps();
+            $table->softDeletes();
             $table->foreign('passenger_id')
             ->references('id')
             ->on('users')

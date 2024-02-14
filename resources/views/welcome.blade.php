@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Laravel</title>
+        <title>RideBook</title>
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
@@ -29,7 +29,7 @@
                 <nav class="navbar navbar-expand-lg custom_nav-container ">
                   <a class="navbar-brand" href="{{ '/' }}">
                     <span>
-                      Urotaxi
+                     RideBook
                     </span>
                   </a>
                   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">

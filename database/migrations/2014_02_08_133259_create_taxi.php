@@ -16,7 +16,6 @@ return new class extends Migration
             $table->string('Vehicle_Platenumber');
             $table->string('Vehicle_Type');
             $table->integer('Available_Seats')->default(6);
-            $table->boolean('isHidden')->default(0);
             $table->timestamps(); 
          
            

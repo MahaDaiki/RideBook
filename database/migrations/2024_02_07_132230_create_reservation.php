@@ -18,10 +18,10 @@ return new class extends Migration
             $table->integer('price');
             $table->integer('Value');
             $table->string('Feedback');
-            $table->boolean('isHidden')->default(0);
             $table->unsignedBigInteger('passenger_id');
             $table->unsignedBigInteger('driver_schedule_id');
             $table->timestamps();
+            $table->softDeletes();
             $table->foreign('passenger_id')
             ->references('id')
             ->on('passenger');
