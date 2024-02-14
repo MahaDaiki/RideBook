@@ -28,27 +28,29 @@ class AdminController extends Controller
     }
 
     public function softDeleteUserAndRelated($id)
-{
-    $user = User::withTrashed()->find($id);
-
-    if ($user) {
-        $passenger = $user->passenger;
-        $driver = $user->driver;
-        $user->delete();
-
-        if ($passenger) {
-            $passenger->delete();
+    {
+        $user = User::withTrashed()->find($id);
+    
+        if ($user) {
+            $passenger = $user->passenger;
+            $driver = $user->driver;
+    
+            if ($passenger) {
+                $passenger->delete();
+            }
+    
+            if ($driver) {
+                $driver->delete();
+            }
+    
+            $user->delete();
+    
+            return redirect()->back()->with('success', 'User and related records soft deleted successfully.');
         }
-
-        if ($driver) {
-            $driver->delete();
-        }
-
-        return redirect()->back()->with('success', 'User and related records soft deleted successfully.');
+    
+        return redirect()->back()->with('error', 'User not found.');
     }
-
-    return redirect()->back()->with('error', 'User not found.');
-}
+    
     /**
      * Show the form for creating a new resource.
      */
