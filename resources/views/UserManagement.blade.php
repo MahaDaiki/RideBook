@@ -67,16 +67,30 @@
                             <button class="m-0 font-weight-bold text-primary ml-5" id="showDriverButton">Show Drivers</button>
                         </div>
                         <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0"  style="display: none;">
+                            <div class="table-responsive text-center">
+                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0"  >
+                                    
+                                    @if ($errors->any())
+                                    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                                        <strong class="font-bold">Errors!</strong>
+                                        <ul>
+                                            @foreach ($errors->all() as $error)
+                                                <li>{{ $error }}</li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                @endif
+
                                     <thead>
                                         <tr>
                                             <th>Name</th>
                                             <th>Email</th>
                                             <th>Phone number</th>
-                                            <th>Actions</th>
+                                            <th><button class="m-0 font-weight-bold text-primary border" id="addPassengerButton" data-toggle="modal" data-target="#addPassengerModal">+</button></th>
                                         </tr>
+                                        
                                     </thead>
+                                    
                                     <tbody>
                                        
                                             @foreach ($passengers as $passenger)
@@ -99,9 +113,65 @@
                                 </table>
                             </div>
                         </div>
+                     
+<div class="modal fade" id="addPassengerModal" tabindex="-1" role="dialog" aria-labelledby="addPassengerModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addPassengerModalLabel">Add Passenger</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+            {{-- route('add.passenger') --}}
+                <form id="addPassengerForm" action="{{ route('add.passenger') }}" method="post" enctype="multipart/form-data">
+                    @csrf
+                    <div class="form-group">
+                        <input type="file" class="form-style" id="profilepicture" name="profilepicture" accept="image/*" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-style" placeholder="Full Name" name="name" :value="old('name')" required autofocus>
+                        <i class="input-icon uil uil-user"></i>
+                    </div>
+                    <div class="form-group mt-2">
+                        <input type="tel" class="form-style" placeholder="Phone Number" name="phonenumber" :value="old('phonenumber')">
+                        <i class="input-icon uil uil-phone"></i>
+                    </div>
+                    <div class="form-group mt-2">
+                        <input type="email" class="form-style" placeholder="Email" name="email" :value="old('email')" required>
+                        <i class="input-icon uil uil-at"></i>
+                    </div>
+                    <div class="form-group mt-2">
+                        <input type="password" class="form-style" placeholder="Password" name="password" required autocomplete="new-password">
+                        <i class="input-icon uil uil-lock-alt"></i>
+                    </div>
+                    <div class="form-group mt-2">
+                        <input type="password" class="form-style" placeholder="Confirm Password" name="password_confirmation" required autocomplete="new-password">
+                        <i class="input-icon uil uil-lock-alt"></i>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add Passenger</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
                         <div class="card-body">
                             <div class="table-responsive">
+                               
+
                                 <table class="table table-bordered" id="driverTable" width="100%" cellspacing="0"  style="display: none;">
+                                    @if ($errors->any())
+                                    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                                        <strong class="font-bold">Errors!</strong>
+                                        <ul>
+                                            @foreach ($errors->all() as $error)
+                                                <li>{{ $error }}</li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                @endif
                                     <thead>
                                         <tr>
                                             <th>Name</th>
@@ -110,7 +180,8 @@
                                             <th>Description</th>
                                             <th>payment Method</th>
                                             <th>Taxi</th>
-                                            <th>Actions</th>
+                                            <th> <button class="m-0 font-weight-bold text-primary ml-5" id="addDriverButton" data-toggle="modal" data-target="#addDriverModal">+</button></th>
+
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -142,6 +213,67 @@
                     </div>
 
                 </div>
+                <div class="modal fade" id="addDriverModal" tabindex="-1" role="dialog" aria-labelledby="addDriverModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="addDriverModalLabel">Add Driver</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="addDriverForm" action="{{ route('add.driver') }}" method="post" enctype="multipart/form-data">
+                                    @csrf
+                                    <div class="form-group">
+                                        <input type="file" class="form-style" id="profilepicture" name="profilepicture" accept="image/*" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="text" class="form-style" placeholder="Full Name" name="name" :value="old('name')" required autofocus>
+                                        <i class="input-icon uil uil-user"></i>
+                                    </div>
+                                    <div class="form-group mt-2">
+                                        <input type="tel" class="form-style" placeholder="Phone Number" name="phonenumber" :value="old('phonenumber')">
+                                        <i class="input-icon uil uil-phone"></i>
+                                    </div>
+                                    <div class="form-group mt-2">
+                                        <input type="email" class="form-style" placeholder="Email" name="email" :value="old('email')" required>
+                                        <i class="input-icon uil uil-at"></i>
+                                    </div>
+                                    <div class="form-group mt-2">
+                                        <input type="password" class="form-style" placeholder="Password" name="password" required autocomplete="new-password">
+                                        <i class="input-icon uil uil-lock-alt"></i>
+                                    </div>
+                                    <div class="form-group mt-2">
+                                        <input type="password" class="form-style" placeholder="Confirm Password" name="password_confirmation" required autocomplete="new-password">
+                                        <i class="input-icon uil uil-lock-alt"></i>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Description</label>
+                                        <input type="text" class="form-style" placeholder="Description" name="Description" :value="old('Description')">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Payment Method</label>
+                                        <select id="Payment" name="Payment" class="form-style" required>
+                                            <option value="cash">Cash</option>
+                                            <option value="card">Card</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Vehicle Plate Number</label>
+                                        <input type="text" class="form-style" placeholder="Vehicle Plate Number" name="vehicle_platenumber" :value="old('vehicle_platenumber')">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Vehicle Type</label>
+                                        <input type="text" class="form-style" placeholder="Vehicle Type" name="vehicle_type" :value="old('vehicle_type')">
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Add Driver</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
                 <!-- /.container-fluid -->
 
             </div>
@@ -162,6 +294,7 @@
                     var driverTable = document.getElementById('driverTable');
                     var showPassengerButton = document.getElementById('showPassengerButton');
                     var showDriverButton = document.getElementById('showDriverButton');
+                    
             
                     function showPassengerTable() {
                         passengerTable.style.display = 'table';

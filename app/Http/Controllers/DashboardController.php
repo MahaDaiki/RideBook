@@ -16,11 +16,11 @@ class DashboardController extends Controller
         $user = Auth::user();
 
         if ($user->hasRole('admin')) {
-            return view('dashboardAdmin');
+            return redirect()->route('admin.dashboard');
         } elseif ($user->hasRole('driver')) {
-            return view('dashboardDriver');
+            return redirect()->route('driver.dashboard');
         } elseif ($user->hasRole('passenger')) {
-            return view('dashboardPassenger');
+            return redirect()->route('dashboardPassenger');
         } else {
             
             abort(403, 'Unauthorized');

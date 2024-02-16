@@ -4,8 +4,10 @@ use App\Http\Controllers\AdminController;
 
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DriverController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+
 
 
 
@@ -32,8 +34,16 @@ Route::get('/dashboard', [DashboardController::class, 'showDashboard'])
     Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::get('/admin-dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
     });
+    Route::middleware(['auth', 'role:driver'])->group(function () {
+        Route::get('/driver-dashboard', [DriverController::class, 'showRouteSelectionForm'])->name('driver.dashboard');
+    });
+    Route::put('/driver/update-route', [DriverController::class, 'updateRoute'])->name('driver.updateRoute');
+
     Route::delete('/soft-delete-user/{id}', [AdminController::class, 'softDeleteUserAndRelated'])
     ->name('soft.delete.user'); 
+    Route::post('/addPassenger',  [AdminController::class, 'addPassenger'])->name('add.passenger');
+    Route::post('/addDriver', [AdminController::class, 'addDriver'])->name('add.driver');
+
 
 
 Route::middleware('auth')->group(function () {

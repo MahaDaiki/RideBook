@@ -12,4 +12,14 @@ class Cities extends Model
     protected $fillable = [
         'name',
     ];
+    public function startingRoutes()
+    {
+        return $this->hasMany(Routes::class, 'start_city_id');
+    }
+
+    public function destinationRoutes()
+    {
+        return $this->hasMany(Routes::class, 'destination_city_id');
+    }
+
 }

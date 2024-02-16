@@ -19,7 +19,8 @@ return new class extends Migration
             $table->foreign('passenger_id')
             ->references('id')
             ->on('users')
-            ->where('role', 'passenger');
+            ->where('role', 'passenger')
+            ->onDelete('cascade');
         });
     }
 

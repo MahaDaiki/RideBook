@@ -52,7 +52,7 @@ class User extends Authenticatable
     
     public function driver()
     {
-        return $this->hasOne(Driver::class);
+        return $this->hasOne(Driver::class, 'Driver_id');
     }
 
     public function passenger()

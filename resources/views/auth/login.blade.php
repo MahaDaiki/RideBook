@@ -21,15 +21,16 @@
                                         <h4 class="mb-4 pb-3">Log In</h4>
                                         <form method="POST" action="{{ route('login') }}">
                                             @csrf
-                                            <div class="form-group"> 
-                                                <i class="input-icon uil uil-at"></i>
+                                            <div class="form-group d-flex"> 
+                                                <i class=" uil uil-at fs-2"></i>
                                                 <input type="email" class=" form-style block mt-1 w-full" placeholder="Email" name="email" :value="old('email')" required autofocus autocomplete="username">
                                                
                                                 <x-input-error :messages="$errors->get('email')" class="mt-2" />
                                             </div>
-                                            <div class="form-group mt-2">
+                                            <div class="form-group mt-2 d-flex">
+                                                <i class="fs-2 uil uil-lock-alt"></i>
                                                 <input type="password" class="form-style block mt-1 w-full" placeholder="Password" name="password" required autocomplete="current-password">
-                                                <i class="input-icon uil uil-lock-alt"></i>
+                                                
                                                 <x-input-error :messages="$errors->get('password')" class="mt-2" />
                                             </div>
                                             <div class="block mt-4">

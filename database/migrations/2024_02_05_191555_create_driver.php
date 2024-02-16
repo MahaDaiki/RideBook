@@ -24,10 +24,12 @@ return new class extends Migration
             $table->foreign('driver_id')
             ->references('id')
             ->on('users')
-            ->where('role', 'driver');
-            $table->foreign('taxi_id')
+            ->where('role', 'driver')
+            ->onDelete('cascade');
+$table->foreign('taxi_id')
             ->references('id')
-            ->on('taxi');
+            ->on('taxi')
+            ->onDelete('cascade');
             $table->foreign('route_id')
             ->references('id')
             ->on('routes');

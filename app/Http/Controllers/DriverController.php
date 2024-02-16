@@ -2,18 +2,50 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Controller;
 use App\Models\Driver;
+use App\Models\Routes;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class DriverController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     public function index()
     {
         //
     }
+
+
+    public function showRouteSelectionForm()
+{
+    
+    $routes = Routes::all();
+    $routeCities = [];
+
+    foreach ($routes as $route) {
+        $startCity = $route->startCity->name;
+        $endCity = $route->endCity->name;
+
+        $routeCities[] = [
+            'route_id' => $route->id,
+            'startCity' => $startCity,
+            'endCity' => $endCity,
+        ];
+    }
+    return view('dashboardDriver', compact('routeCities'));
+}
+
+public function updateRoute(Request $request)
+{
+    $driver = Auth::user()->driver; 
+    $driver->update(['Route_id' => $request->input('route_id')]);
+
+    return redirect()->back()->with('success', 'Route updated successfully!');
+}
 
     /**
      * Show the form for creating a new resource.

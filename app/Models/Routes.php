@@ -14,4 +14,13 @@ class Routes extends Model
         'destination_city_id',
 
     ];
+    public function startCity()
+    {
+        return $this->belongsTo(Cities::class, 'start_city_id');
+    }
+
+    public function endCity()
+    {
+        return $this->belongsTo(Cities::class, 'destination_city_id');
+    }
 }

@@ -4,10 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Admin;
 use App\Models\Driver;
-use App\Models\Taxi;
 use App\Models\Passenger;
+use App\Models\Taxi;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
 {
@@ -28,56 +29,142 @@ class AdminController extends Controller
     }
 
     public function softDeleteUserAndRelated($id)
-    {
-        $user = User::withTrashed()->find($id);
-    
-        if ($user) {
-            $passenger = $user->passenger;
-            $driver = $user->driver;
-    
-            if ($passenger) {
-                $passenger->delete();
-            }
-    
-            if ($driver) {
-                $driver->delete();
-            }
-    
-            $user->delete();
-    
-            return redirect()->back()->with('success', 'User and related records soft deleted successfully.');
-        }
-    
-        return redirect()->back()->with('error', 'User not found.');
-    }
-    
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+{
+    $user = User::withTrashed()->find($id);
+
+    if ($user) {
+        $user->delete();
+
+        return redirect()->back()->with('success', 'User soft deleted successfully.');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+    return redirect()->back()->with('error', 'User not found.');
+}
+public function addPassenger(Request $request)
+{
+    
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'phonenumber' => 'required|string|max:20',
+        'email' => 'required|string|email|max:255|unique:users',
+        'password' => 'required|string|min:8|confirmed',
+        'profilepicture' => 'required|image',
+    ]);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Admin $admin)
-    {
-        //
-    }
+  
+    $profilePicturePath = $request->file('profilepicture')->store('profile_pictures', 'public');
 
-    /**
-     * Show the form for editing the specified resource.
-     */
+   
+    $user = User::create([
+        'name' => $request->input('name'),
+        'phonenumber' => $request->input('phonenumber'),
+        'email' => $request->input('email'),
+        'password' => Hash::make($request->input('password')),
+        'profilepicture' => $profilePicturePath,
+    ]);
+
+    $user->assignRole('passenger');
+
+    
+    Passenger::create(['passenger_id' => $user->id]);
+
+    return redirect()->back()->with('success', 'Passenger added successfully');
+}
+public function addDriver(Request $request)
+{
+    
+    $request->validate([
+        'name' => ['required', 'string', 'max:255'],
+        'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:users'],
+        'password' => ['required', 'confirmed', 'min:8' ],
+        'profilepicture' => ['required', 'image', 'max:2048'],
+        'phonenumber' => ['required', 'numeric'],
+        'Description' => ['required', 'string'],
+        'Payment' => ['required', 'in:cash,card'],
+        'vehicle_platenumber' => ['required', 'string'],
+        'vehicle_type' => ['required', 'string'],
+    ]);
+
+    $user = User::create([
+        'name' => $request->input('name'),
+        'email' => $request->input('email'),
+        'password' => Hash::make($request->input('password')),
+        'profilepicture' => $request->file('profilepicture')->store('app/public/Images', 'public'),
+        'phonenumber' => $request->input('phonenumber'),
+    ]);
+
+    $user->assignRole('driver');
+
+    
+    $taxi = Taxi::create([
+        'Vehicle_Platenumber' => $request->input('vehicle_platenumber'),
+        'Vehicle_Type' => $request->input('vehicle_type'),
+       
+    ]);
+
+    // dd($user->id);
+    Driver::create([
+        'Driver_id' => $user->id,
+        'Taxi_id' => $taxi->id, 
+        'Description' => $request->input('Description'),
+        'Payment' => $request->input('Payment'),
+        
+    ]);
+
+    return redirect()->back()->with('success', 'Driver registration successful! Provide additional details.');
+}
+
+public function updatePassenger(Request $request, $id)
+{
+    // Add validation rules as needed
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'phonenumber' => 'required|string|max:20',
+        'email' => 'required|string|email|max:255|unique:users,email,' . $id,
+        // Add more validation rules as needed
+    ]);
+
+    $user = User::findOrFail($id);
+
+    // Update user details
+    $user->update([
+        'name' => $request->input('name'),
+        'phonenumber' => $request->input('phonenumber'),
+        'email' => $request->input('email'),
+    ]);
+
+    return redirect()->back()->with('success', 'Passenger details updated successfully');
+}
+
+// Update function for driver
+public function updateDriver(Request $request, $id)
+{
+    // Add validation rules as needed
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|string|lowercase|email|max:255|unique:users,email,' . $id,
+        // Add more validation rules as needed
+    ]);
+
+    $user = User::findOrFail($id);
+
+    // Update user details
+    $user->update([
+        'name' => $request->input('name'),
+        'email' => $request->input('email'),
+    ]);
+
+    // Update driver-specific details
+    $driver = $user->driver;
+    $driver->update([
+        'Description' => $request->input('Description'),
+        'Payment' => $request->input('Payment'),
+        // Add more fields as needed
+    ]);
+
+    return redirect()->back()->with('success', 'Driver details updated successfully');
+}
+
     public function edit(Admin $admin)
     {
         //
