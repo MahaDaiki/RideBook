@@ -17,6 +17,6 @@ class Taxi extends Model
     ];
     public function driver()
     {
-        return $this->hasOne(Driver::class, 'Taxi_id');
+        return $this->hasOne(Driver::class);
     }
 }

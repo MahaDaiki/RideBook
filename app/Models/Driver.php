@@ -22,11 +22,15 @@ class Driver extends Model
     ];
     public function taxi()
 {
-    return $this->belongsTo(Taxi::class, 'Taxi_id');
+    return $this->belongsTo(Taxi::class);
 }
 public function user()
 {
     return $this->belongsTo(User::class, 'Driver_id');
 }
+public function route()
+    {
+        return $this->belongsTo(Routes::class, 'Route_id');
+    }
 
 }

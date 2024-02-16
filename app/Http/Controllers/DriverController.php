@@ -23,6 +23,11 @@ class DriverController extends Controller
     public function showRouteSelectionForm()
 {
     
+
+    $user = auth()->user();
+    $driver = Driver::with(['taxi', 'route'])->where('driver_id', $user->id)->first();
+
+
     $routes = Routes::all();
     $routeCities = [];
 
@@ -36,10 +41,10 @@ class DriverController extends Controller
             'endCity' => $endCity,
         ];
     }
-    return view('dashboardDriver', compact('routeCities'));
+    return view('dashboardDriver', compact('routeCities','driver'));
 }
 
-public function updateRoute(Request $request)
+public function updateRoute(Request $request,)
 {
     $driver = Auth::user()->driver; 
     $driver->update(['Route_id' => $request->input('route_id')]);

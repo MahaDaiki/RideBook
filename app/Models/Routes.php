@@ -23,4 +23,8 @@ class Routes extends Model
     {
         return $this->belongsTo(Cities::class, 'destination_city_id');
     }
+    public function driver()
+    {
+        return $this->hasOne(Driver::class, 'id');
+    }
 }

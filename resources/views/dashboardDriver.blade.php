@@ -1,28 +1,37 @@
 <x-app-layout>
 
- 
+ <div class="bg-dark container">
         <x-slot name="header">
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 bg-warning">
                 <div class="text-center d-flex justify-center items-center">
                     <img src="{{  Auth::user()->profile_picture }}" alt="Profile Picture" class="rounded-circle shadow" width="200" height="200">
                     <h3 class="ml-3"> {{ Auth::user()->name }} </h3>
                 </div>
+                <p class="text-center">{{ $driver->Description }}</p>
             </h2>
         </x-slot>
-
+        <div class="card container text-center fs-4  bg-warning">
+   
+       
+            <h1 class=" text-center ">Taxi</h1>
+            <h2 class=""> License Plate :{{ $driver->taxi->Vehicle_Platenumber }} </h2>
+            <h2 class=""> Vehicle Type :{{ $driver->taxi->Vehicle_Type }} </h2>
+         
+        </div>
+        <div class="card container text-center d-flex">
         <div class="mt-4">
             <h4>Chosen Route:</h4>
         
             <div>
-                {{-- <h4>Start City: {{ $route['startCity'] }} to 
-                End City: {{ $route['endCity'] }}</h4> --}}
+              <h4>{{ $driver->route }}</h4>
                 <hr>
             </div>
-        
-
-        
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#routeSelectionModal">
+            <button type="button" class="btn btn-primary float-right mr-5" data-toggle="modal" data-target="#routeSelectionModal">
                 Routes
+        
+</div>
+        
+          
             </button>
             <div class="modal fade" id="routeSelectionModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
@@ -55,8 +64,8 @@
             </div>
         </div>
 
-        <div class="mt-4">
-            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addScheduleModal">
+        <div class="mt-5">
+            <button type="button" class="btn btn-success float-right mr-5 " data-toggle="modal" data-target="#addScheduleModal">
                 Add Schedule
             </button>
 
@@ -77,5 +86,5 @@
             </div>
         </div>
     </div>
-    
+</div>
 </x-app-layout>
