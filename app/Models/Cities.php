@@ -14,12 +14,12 @@ class Cities extends Model
     ];
     public function startingRoutes()
     {
-        return $this->hasMany(Routes::class, 'start_city_id');
+        return $this->hasMany(Routes::class);
     }
 
     public function destinationRoutes()
     {
-        return $this->hasMany(Routes::class, 'destination_city_id');
+        return $this->hasMany(Routes::class);
     }
 
 }

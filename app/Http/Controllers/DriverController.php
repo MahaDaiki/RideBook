@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Driver;
+use App\Models\DriverSchedules;
 use App\Models\Routes;
+use App\Models\Schedules;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -25,7 +27,14 @@ class DriverController extends Controller
     
 
     $user = auth()->user();
-    $driver = Driver::with(['taxi', 'route'])->where('driver_id', $user->id)->first();
+    $driver = Driver::with(['taxi', 'routes'])->where('driver_id', $user->id)->first();
+
+    // if ($driver->routes) {
+    
+    //     $startCityForDriver = $driver->routes->startCity;
+    //     $endCityForDriver = $driver->routes->endCity;
+    
+   
 
 
     $routes = Routes::all();
@@ -41,7 +50,8 @@ class DriverController extends Controller
             'endCity' => $endCity,
         ];
     }
-    return view('dashboardDriver', compact('routeCities','driver'));
+    $schedules = $user->driver->driverSchedules()->with('schedule')->get();
+    return view('dashboardDriver', compact('routeCities','driver','schedules'));
 }
 
 public function updateRoute(Request $request,)
@@ -55,9 +65,25 @@ public function updateRoute(Request $request,)
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function addSchedule(Request $request)
     {
-        //
+       
+        $schedule = Schedules::create([
+            'date' => $request->input('date'),
+        ]);
+
+        
+        $driverId = auth()->user()->driver->id;
+
+        
+        DriverSchedules::create([
+            'driver_id' => $driverId,
+            'schedule_id' => $schedule->id,
+            'isDone' => 'Waiting', 
+        ]);
+
+     
+        return redirect()->back()->with('success', 'Schedule added successfully');
     }
 
     /**

@@ -58,7 +58,7 @@ class User extends Authenticatable
     public function passenger()
     {
         
-        return $this->hasOne(Passenger::class);
+        return $this->hasOne(Passenger::class,'Passenger_id');
     }
 
     public function admin()

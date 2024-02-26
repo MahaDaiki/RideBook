@@ -19,7 +19,7 @@ return new class extends Migration
             $table->integer('Value');
             $table->string('Feedback');
             $table->unsignedBigInteger('passenger_id');
-            $table->unsignedBigInteger('driver_schedule_id');
+            $table->unsignedBigInteger('driver_schedule_id')->nullable();
             $table->timestamps();
             $table->softDeletes();
             $table->foreign('passenger_id')

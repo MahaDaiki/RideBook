@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Passenger;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PassengerController extends Controller
 {
@@ -12,7 +14,9 @@ class PassengerController extends Controller
      */
     public function index()
     {
-        //
+        $user = Auth::user();
+ $reservations = $user->passenger->reservations;
+   return view('dashboardPassenger', compact('reservations'));
     }
 
     /**

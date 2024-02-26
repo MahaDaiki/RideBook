@@ -33,25 +33,30 @@
                                                 <div class="form-group">
                                                     <input type="file" class="form-style" id="profilepicture" name="profilepicture" accept="image/*" required>
                                                 </div>
-                                                <div class="form-group">
-                                                    <input type="text" class="form-style" placeholder="Full Name" name="name" :value="old('name')" required autofocus>
-                                                    <i class="input-icon uil uil-user"></i>
+                                                <div class="form-group d-flex">
+                                                    <i class="input-icon uil uil-user "></i>
+                                                    <input type="text" class="form-style block ml-5" placeholder="Full Name" name="name" :value="old('name')" required autofocus>
+                                                    
                                                 </div>
-                                                <div class="form-group mt-2">
-                                                    <input type="tel" class="form-style" placeholder="Phone Number" name="phonenumber" :value="old('phonenumber')">
+                                                <div class="form-group mt-2 d-flex">
                                                     <i class="input-icon uil uil-phone"></i>
+                                                    <input type="tel" class="form-style block ml-5" placeholder="Phone Number" name="phonenumber" :value="old('phonenumber')">
+                                                    
                                                 </div>
-                                                <div class="form-group mt-2">
-                                                    <input type="email" class="form-style" placeholder="Email" name="email" :value="old('email')" required>
+                                                <div class="form-group mt-2 d-flex">
                                                     <i class="input-icon uil uil-at"></i>
+                                                    <input type="email" class="form-style block ml-5" placeholder="Email" name="email" :value="old('email')" required>
+                                                    
                                                 </div>
-                                                <div class="form-group mt-2">
-                                                    <input type="password" class="form-style" placeholder="Password" name="password" required autocomplete="new-password">
+                                                <div class="form-group mt-2 d-flex">
                                                     <i class="input-icon uil uil-lock-alt"></i>
+                                                    <input type="password" class="form-style block ml-5" placeholder="Password" name="password" required autocomplete="new-password">
+                                                   
                                                 </div>
-                                                <div class="form-group mt-2">
-                                                    <input type="password" class="form-style" placeholder="Confirm Password" name="password_confirmation" required autocomplete="new-password">
+                                                <div class="form-group mt-2 d-flex">
                                                     <i class="input-icon uil uil-lock-alt"></i>
+                                                    <input type="password" class="form-style block ml-5" placeholder="Confirm Password" name="password_confirmation" required autocomplete="new-password">
+                                                   
                                                 </div>
                                                 <div class="mt-4">
                                                     <select id="role" name="role" class="form-style" required>

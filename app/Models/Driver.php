@@ -28,9 +28,13 @@ public function user()
 {
     return $this->belongsTo(User::class, 'Driver_id');
 }
-public function route()
+public function routes()
+{
+    return $this->belongsTo(Routes::class, 'Route_id');
+}
+    public function driverSchedules()
     {
-        return $this->belongsTo(Routes::class, 'Route_id');
+        return $this->hasMany(DriverSchedules::class);
     }
 
 }

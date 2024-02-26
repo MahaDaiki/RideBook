@@ -20,7 +20,7 @@ class DashboardController extends Controller
         } elseif ($user->hasRole('driver')) {
             return redirect()->route('driver.dashboard');
         } elseif ($user->hasRole('passenger')) {
-            return redirect()->route('dashboardPassenger');
+            return redirect()->route('passenger.dashboard');
         } else {
             
             abort(403, 'Unauthorized');

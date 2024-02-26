@@ -18,12 +18,18 @@
             <h2 class=""> Vehicle Type :{{ $driver->taxi->Vehicle_Type }} </h2>
          
         </div>
-        <div class="card container text-center d-flex">
+        <div class="card container text-center d-flex mt-4">
         <div class="mt-4">
             <h4>Chosen Route:</h4>
         
             <div>
-              <h4>{{ $driver->route }}</h4>
+                
+                <p>{{ $driver->route_id }}</p>
+
+                {{-- <p>Start City: {{ $startCityForDriver->name }}</p>
+                <p>End City: {{ $endCityForDriver->name }}</p>
+           --}}
+           
                 <hr>
             </div>
             <button type="button" class="btn btn-primary float-right mr-5" data-toggle="modal" data-target="#routeSelectionModal">
@@ -63,11 +69,25 @@
                 </div>
             </div>
         </div>
-
-        <div class="mt-5">
+        <div class="card container text-center d-flex mt-4 mb-5">
+            <div class="mt-4">
+                <h4>Chosen Route:</h4>
+                @if ($schedules->count() > 0)
+        <ul>
+            @foreach ($schedules as $driverSchedule)
+                <li>{{ $driverSchedule->schedule->date }} - Status: {{ $driverSchedule->isDone }}</li>
+            @endforeach
+        </ul>
+    @else
+        <p>No schedules available for the driver.</p>
+    @endif
+            
+      
             <button type="button" class="btn btn-success float-right mr-5 " data-toggle="modal" data-target="#addScheduleModal">
                 Add Schedule
             </button>
+        </div>
+        </div>
 
             <div class="modal fade" id="addScheduleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
@@ -78,9 +98,13 @@
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
+                        <form action="{{ route('add.schedule') }}" method="POST">
+                            @csrf
                         <div class="modal-body">
                             <input type="date" name="date" id="date">
                         </div>
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </form>
                     </div>
                 </div>
             </div>

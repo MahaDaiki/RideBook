@@ -53,6 +53,7 @@
                             <a class="nav-link" href="{{ route('register') }}" > Register</a>
                              @endif
                         </li>
+                        
                       </ul>
                      
                       @endauth
@@ -128,11 +129,24 @@
                           <h4>
                             Get A Taxi Now
                           </h4>
-                          <form action="">
-                     
-                            <input type="text" placeholder="Pick Up">
-                            <input type="text" placeholder="Destination">
-                            <input type="text" placeholder="Number Of People">
+                          <form method="post" action="{{ route('search.route') }}">
+                            @csrf
+                            <label for="start_city" class="text-warning">Start City:</label>
+                            <select name="start_city" id="start_city">
+                                @foreach ($cities as $city)
+                                    <option value="{{ $city->id }}">{{ $city->name }}</option>
+                                @endforeach
+                            </select>
+                        <div>
+                            <label for="end_city" class="text-warning">End City:</label>
+                            <select name="end_city" id="end_city">
+                                @foreach ($cities as $city)
+                                    <option value="{{ $city->id }}">{{ $city->name }}</option>
+                                @endforeach
+                            </select>
+                          </div>
+                            <input type="date" name="schedule" id="schedule">
+                            <input type="number" placeholder="Number Of People">
                             <div class="btm_input">
                               <button>Search</button>
                             </div>

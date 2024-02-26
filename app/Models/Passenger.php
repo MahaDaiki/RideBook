@@ -18,4 +18,8 @@ class Passenger extends Model
     public function user(){
         return $this->belongsTo(User::class,'passenger_id');
     }
+    public function reservations()
+    {
+        return $this->hasMany(Reservations::class);
+    }
 }
