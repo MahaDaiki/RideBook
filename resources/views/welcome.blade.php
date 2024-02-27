@@ -130,6 +130,12 @@
                             Get A Taxi Now
                           </h4>
                           <form method="post" action="{{ route('search.route') }}">
+                            @if(session('error'))
+    <div class="alert alert-danger">
+        {{ session('error') }}
+    </div>
+@endif
+
                             @csrf
                             <label for="start_city" class="text-warning">Start City:</label>
                             <select name="start_city" id="start_city">
@@ -145,8 +151,8 @@
                                 @endforeach
                             </select>
                           </div>
-                            <input type="date" name="schedule" id="schedule">
-                            <input type="number" placeholder="Number Of People">
+                            <input type="date" name="schedule" id="schedule" required>
+                            <input type="number" placeholder="Number Of People" required>
                             <div class="btm_input">
                               <button>Search</button>
                             </div>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Cities;
 use App\Models\Driver;
+use App\Models\DriverSchedules;
 use App\Models\Routes;
 use App\Models\Taxi;
 use Illuminate\Http\Request;
@@ -20,8 +21,11 @@ class SearchController extends Controller
         $startCityId = $request->input('start_city');
         $endCityId = $request->input('end_city');
         $date = $request->input('schedule');
+        if ($startCityId == $endCityId) {
+            return back()->with('error', 'Start city cannot be equal to end city.');
+        }
     
-        $routes = Routes::where('start_city_id', $startCityId)
+       else { $routes = Routes::where('start_city_id', $startCityId)
             ->where('destination_city_id', $endCityId)
             ->get();
     
@@ -35,20 +39,42 @@ class SearchController extends Controller
                 ->get();
    
             foreach ($drivers as $driver) {
+               
+$driverSchedule = DriverSchedules::where('driver_id', $driver->driver_id)
+->where('schedule_id', $driver->schedule_id)
+->first();
+
+if ($driverSchedule) {
+$scheduleDate = $driverSchedule->schedule->date;
+$driverScheduleId = $driverSchedule->id;
+}
+ else {
+  
+    $scheduleDate = null;
+    $driverScheduleId = null;
+}
+
                 $taxi = $driver ? Taxi::find($driver->taxi_id) : null;
-                $schedules = $driver ? $driver->driverSchedules->pluck('schedule') : null;
+               
     
                 $driverAndTaxiData->push([
                     'route' => $route,
                     'driver' => $driver,
                     'taxi' => $taxi,
-                    'schedules' => $schedules,
+                    'scheduleDate' => $scheduleDate,
+            'driverScheduleId' => $driverScheduleId,
+                    
                 ]);
             }
+        
         }
     
-        return view('SearchResults', compact('driverAndTaxiData'));
+        if ($driverAndTaxiData->isEmpty()) {
+            return view('SearchResults', compact('driverAndTaxiData'))->with('noResults','No results Found'); 
+        }
+        else return view('SearchResults', compact('driverAndTaxiData'));
     }
+}
     
     
 

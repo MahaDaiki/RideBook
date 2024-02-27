@@ -26,7 +26,7 @@ class Driver extends Model
 }
 public function user()
 {
-    return $this->belongsTo(User::class, 'Driver_id');
+    return $this->belongsTo(User::class, 'id');
 }
 public function routes()
 {

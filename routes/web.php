@@ -7,8 +7,10 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DriverController;
 use App\Http\Controllers\PassengerController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\SearchController;
 use Illuminate\Support\Facades\Route;
+
 
 
 
@@ -30,7 +32,8 @@ Route::get('/', function () {
 });
 Route::get('/', [SearchController::class, 'index']);
 Route::post('/search-route', [SearchController::class, 'searchRoute'])->name('search.route');
-Route::get('/search-results', [SearchController::class, 'displayResults'])->name('search.results');
+// Route::get('/search-results', [SearchController::class, 'displayResults'])->name('search.results');
+Route::post('/confirm-reservation', [ReservationController::class, 'confirmReservation'])->name('confirmReservation');
 
 Route::get('/dashboard', [DashboardController::class, 'showDashboard'])
     ->middleware(['auth', 'verified'])
@@ -45,6 +48,10 @@ Route::get('/dashboard', [DashboardController::class, 'showDashboard'])
     Route::middleware(['auth', 'role:passenger'])->group(function () {
         Route::get('/passenger-dashboard', [PassengerController::class, 'index'])->name('passenger.dashboard');
     });
+
+
+
+
     Route::put('/driver/update-route', [DriverController::class, 'updateRoute'])->name('driver.updateRoute');
     Route::post('/add-schedule', [DriverController::class, 'addSchedule'])->name('add.schedule'); 
 

@@ -67,51 +67,82 @@
             </header>
 
             <div class="container">
-                <h1 class="mt-5 mb-4">Search Results</h1>
-            
-                <div class="row row-cols-1 row-cols-md-2 text-center">
-                    @foreach ($driverAndTaxiData as $result)
-                        <div class="col mb-4">
-                            <div class="">
-                               
-            
-                                <div class="card bg-dark text-white position-relative" style="width:50%">
-                                    <img style="width:50%"src="{{ asset('images/about-img.png')}}" alt="Background Image" class="center">
-            
-                                    <div class="overlay-text">
-                                        <div class="details mb-3">
-                                            <h5 class="card-title">{{ $result['route']->startCity->name }} to {{ $result['route']->endCity->name }}</h5>
-                                            <h6 class="card-subtitle mb-2 text-muted">Driver Details</h6>
-                                            <p class="card-text">
-                                                Driver Name: {{ $result['driver']->id}}<br>
-                                                Description: {{ $result['driver']->Description}}<br>
-                                                Payment: {{ $result['driver']->payment}}<br>
-                                            </p>
-                                        </div>
-                                        <div class="details">
-                                            <h6 class="card-subtitle mb-2 text-muted">Taxi Details</h6>
-                                            <p class="card-text">
-                                                Taxi Plate number: {{ $result['taxi']->Vehicle_Platenumber}}<br>
-                                                Taxi Type: {{ $result['taxi']->Vehicle_Type}}<br>
-                                              	
-
-
-                                            </p>
-                                        </div>
-                                        @auth
-                                        <div class="card-footer text-center">
-                                            <button class="btn btn-warning">Reserve</button>
-                                        </div>
-                                        @endauth
-                                    </div>
-                                </div>
-                            </div>
+              <h1 class="mt-5 mb-4">Search Results</h1>
+          
+              <div class="row row-cols-1 row-cols-md-2 text-center">
+                  @forelse ($driverAndTaxiData as $result)
+                      <div class="col mb-4">
+                          <div class="">
+                              <div class="card bg-dark text-white position-relative" style="width:50%">
+                                  <img style="width:50%" src="{{ asset('images/about-img.png')}}" alt="Background Image" class="mx-auto">
+      
+                                  <div class="overlay-text">
+                                      <div class="details mb-3">
+                                          <h5 class="card-title">{{ $result['route']->startCity->name }} to {{ $result['route']->endCity->name }}</h5>
+                                          <h6 class="card-subtitle mb-2">Driver Details:</h6>
+                                          <p class="card-text">
+                                              Driver Name: {{ $result['driver']->name }}<br>
+                                              Description: {{ $result['driver']->Description }}<br>
+                                              Payment: {{ $result['driver']->payment }}<br>
+                                          {{-- SCHEDULE DISPLAY w name driver DOESNT WORK FIX IT LATER --}}
+                              Date: {{ $result['scheduleDate']}}
+                              
+                                             
+                                          </p>
+                                      </div>
+                                      <div class="details">
+                                          <h6 class="card-subtitle mb-2 ">Taxi Details:</h6>
+                                          <p class="card-text">
+                                              Taxi Plate number: {{ $result['taxi']->Vehicle_Platenumber }}<br>
+                                              Taxi Type: {{ $result['taxi']->Vehicle_Type }}<br>
+                                          </p>
+                                      </div>
+                                      @auth
+                                          <div class="card-footer text-center">
+                                              
+                                              <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#confirmReservationModal" data-driver-schedule-id="{{  $result['driverScheduleId']  }}" >
+                                              Reservation
+                                            </button>
+                                            
+                                          </div>
+                                      @endauth
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  @empty
+                      <p>No results found.</p>
+                  @endforelse
+              </div>
+          </div>
+      
+          <div class="modal fade" id="confirmReservationModal" tabindex="-1" role="dialog" aria-labelledby="confirmReservationModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="confirmReservationModalLabel">Reservation</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure you want to confirm the reservation?</p>
+                        <div class="form-group">
+                            <label for="number_of_people">Number of People:</label>
+                            <input type="number" class="form-control" id="number_of_people" name="number_of_people" min="1" required>
                         </div>
-                    @endforeach
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <form method="post" action="{{ route('confirmReservation') }}">
+                            @csrf
+                            <input type="hidden" name="driver_schedule_id" value="{{  $result['driverScheduleId'] }}">
+                            <button type="submit" class="btn btn-primary">Confirm</button>
+                        </form>
+                    </div>
                 </div>
             </div>
-            
-    
+        </div>
 <section class="container-fluid footer_section">
     <div class="container">
       <p>
