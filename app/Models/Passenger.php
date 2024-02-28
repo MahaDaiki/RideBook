@@ -22,4 +22,13 @@ class Passenger extends Model
     {
         return $this->hasMany(Reservations::class);
     }
+    public function delete()
+    {
+       
+        if ($this->user) {
+            $this->user->delete();
+        }
+
+        parent::delete();
+    }
 }

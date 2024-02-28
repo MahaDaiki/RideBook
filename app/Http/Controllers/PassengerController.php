@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Passenger;
+use App\Models\Reservations;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,7 +17,46 @@ class PassengerController extends Controller
     {
         $user = Auth::user();
  $reservations = $user->passenger->reservations;
+
+ foreach ($reservations as $reservation) {
+    $driverSchedule = $reservation->driverSchedule; 
+    $driver = $driverSchedule->driver;
+    // $routes = $driver->routes;
+    // $route = $driver->routes;
+      
+    // $startCityName = $route->startCity->name;
+    // $destinationCityName = $route->endCity->name;
+    
+ 
+} 
+
    return view('dashboardPassenger', compact('reservations'));
+    }
+    public function submitRating(Request $request, Reservations $reservation)
+    {
+        $request->validate([
+            'rating' => 'required|integer|between:1,5',
+        ]);
+
+        $reservation->update([
+            'Value' => $request->input('rating'),
+        ]);
+
+        return redirect()->back()->with('success', 'Rating submitted successfully!');
+    }
+
+    public function submitFeedback(Request $request, Reservations $reservation)
+    {
+
+        $request->validate([
+            'feedback' => 'required|string|max:255',
+        ]);
+
+        $reservation->update([
+            'Feedback' => $request->input('feedback'),
+        ]);
+
+        return redirect()->back()->with('success', 'Feedback submitted successfully!');
     }
 
     /**

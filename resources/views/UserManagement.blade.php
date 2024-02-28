@@ -4,7 +4,7 @@
      <div id="wrapper">
 
         <!-- Sidebar -->
-        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+        <ul class="navbar-nav bg-gradient-warning sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
             <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ '/' }}">
@@ -19,14 +19,14 @@
 
             <!-- Nav Item - Dashboard -->
             <li class="nav-item">
-                <a class="nav-link" href="index.html">
+                <a class="nav-link" href="{{ route('admin.dashboard') }}">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a>
             </li>
       
             <!-- Nav Item - Tables -->
             <li class="nav-item active">
-                <a class="nav-link" href="tables.html">
+                <a class="nav-link" href="{{ route('user.management') }}">
                     <i class="fas fa-fw fa-table"></i>
                     <span>Tables</span></a>
             </li>
@@ -36,7 +36,7 @@
 
             <!-- Sidebar Toggler (Sidebar) -->
             <div class="text-center d-none d-md-inline">
-                <button class="rounded-circle border-0" id="sidebarToggle">X</button>
+                <button class="rounded-circle border-0" id="sidebarToggle"></button>
             </div>
 
         </ul>
@@ -62,9 +62,9 @@
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3 ml-3">
-                            {{-- <h6 class="m-0 font-weight-bold text-primary">Users:</h6> --}}
-                            <button  class="m-0 font-weight-bold text-primary ml-5" id="showPassengerButton">Show Passengers</button>
-                            <button class="m-0 font-weight-bold text-primary ml-5" id="showDriverButton">Show Drivers</button>
+                            {{-- <h6 class="m-0 font-weight-bold text-warning">Users:</h6> --}}
+                            <button  class="m-0 font-weight-bold text-warning ml-5" id="showPassengerButton">Show Passengers</button>
+                            <button class="m-0 font-weight-bold text-warning ml-5" id="showDriverButton">Show Drivers</button>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive text-center">
@@ -86,7 +86,7 @@
                                             <th>Name</th>
                                             <th>Email</th>
                                             <th>Phone number</th>
-                                            <th><button class="m-0 font-weight-bold text-primary border" id="addPassengerButton" data-toggle="modal" data-target="#addPassengerModal">+</button></th>
+                                            <th><button class="m-0 font-weight-bold text-warning border" id="addPassengerButton" data-toggle="modal" data-target="#addPassengerModal">+</button></th>
                                         </tr>
                                         
                                     </thead>
@@ -99,7 +99,7 @@
                                                <td>{{ $passenger->user->email }}</td>
                                                <td>{{ $passenger->user->phonenumber }}</td>
                                                <td> 
-                                                <form action="{{ route('soft.delete.user', ['id' => $passenger->id]) }}" method="post">
+                                                <form action="{{ route('delete_passenger', ['passengerId' => $passenger->id]) }}" method="post">
                                                     @csrf
                                                     @method('delete')
                                                     <button type="submit" class="btn btn-danger">Delete</button>
@@ -150,7 +150,7 @@
                         <input type="password" class="form-style" placeholder="Confirm Password" name="password_confirmation" required autocomplete="new-password">
                         <i class="input-icon uil uil-lock-alt"></i>
                     </div>
-                    <button type="submit" class="btn btn-primary">Add Passenger</button>
+                    <button type="submit" class="btn btn-warning">Add Passenger</button>
                 </form>
             </div>
         </div>
@@ -180,21 +180,21 @@
                                             <th>Description</th>
                                             <th>payment Method</th>
                                             <th>Taxi</th>
-                                            <th> <button class="m-0 font-weight-bold text-primary ml-5" id="addDriverButton" data-toggle="modal" data-target="#addDriverModal">+</button></th>
+                                            <th> <button class="m-0 font-weight-bold text-warning ml-5" id="addDriverButton" data-toggle="modal" data-target="#addDriverModal">+</button></th>
 
                                         </tr>
                                     </thead>
                                     <tbody>
                                        
-                                        @foreach ($drivers as $driver)
+                                        {{-- @foreach ($drivers as $driver)
                                         <tr>
                                             <td>{{ $driver->user->name }}</td>
                                             <td>{{ $driver->user->email }}</td> 
                                             <td>{{ $driver->user->phonenumber}}</td>
                                             <td>{{ $driver->Description }}</td>
                                             <td>{{ $driver->payment }}</td>
-                                            <td>{{ $driver->taxi_id }}</td>
-                                            <td>            <form action="{{ route('soft.delete.user', ['id' => $driver->id]) }}" method="post">
+                                            <td>{{ $driver->taxi_id }}</td> --}}
+                                            {{-- <td>            <form action="{{ route('delete_driver', ['driverId' => $driver->id]) }}" method="post">
                                                 @csrf
                                                 @method('delete')
                                                 <button type="submit" class="btn btn-danger">Delete</button>
@@ -202,7 +202,7 @@
                                            
                                 </td>
                                         </tr>
-                                    @endforeach
+                                    @endforeach --}}
 
                                       
                                       
@@ -267,7 +267,7 @@
                                         <label>Vehicle Type</label>
                                         <input type="text" class="form-style" placeholder="Vehicle Type" name="vehicle_type" :value="old('vehicle_type')">
                                     </div>
-                                    <button type="submit" class="btn btn-primary">Add Driver</button>
+                                    <button type="submit" class="btn btn-warning">Add Driver</button>
                                 </form>
                             </div>
                         </div>

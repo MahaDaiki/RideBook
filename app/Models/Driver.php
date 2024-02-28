@@ -30,11 +30,21 @@ public function user()
 }
 public function routes()
 {
-    return $this->belongsTo(Routes::class, 'Route_id');
+    return $this->belongsTo(Routes::class, 'Route_id', 'id');
 }
     public function driverSchedules()
     {
         return $this->hasMany(DriverSchedules::class);
+    }
+    public function delete()
+    {
+      
+        if ($this->user) {
+            $this->user->delete();
+        }
+
+        
+        parent::delete();
     }
 
 }

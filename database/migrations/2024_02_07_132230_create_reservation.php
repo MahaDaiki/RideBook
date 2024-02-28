@@ -16,8 +16,8 @@ return new class extends Migration
             $table->date('Date');
             $table->integer('Available_Seats');
             $table->integer('price');
-            $table->integer('Value');
-            $table->string('Feedback');
+            $table->integer('Value')->nullable();
+            $table->string('Feedback')->nullable();
             $table->unsignedBigInteger('passenger_id');
             $table->unsignedBigInteger('driver_schedule_id')->nullable();
             $table->timestamps();

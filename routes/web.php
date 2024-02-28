@@ -9,6 +9,7 @@ use App\Http\Controllers\PassengerController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\SearchController;
+use App\Models\Admin;
 use Illuminate\Support\Facades\Route;
 
 
@@ -33,14 +34,16 @@ Route::get('/', function () {
 Route::get('/', [SearchController::class, 'index']);
 Route::post('/search-route', [SearchController::class, 'searchRoute'])->name('search.route');
 // Route::get('/search-results', [SearchController::class, 'displayResults'])->name('search.results');
-Route::post('/confirm-reservation', [ReservationController::class, 'confirmReservation'])->name('confirmReservation');
+Route::post('/confirm-reservation/{ride}', [ReservationController::class, 'confirmReservation'])->name('confirmReservation');
+Route::get('/search',[SearchController::class,'search']);
 
 Route::get('/dashboard', [DashboardController::class, 'showDashboard'])
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
     Route::middleware(['auth', 'role:admin'])->group(function () {
-        Route::get('/admin-dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
+        Route::get('/usermanagement', [AdminController::class, 'index'])->name('user.management');
+        Route::get('/admin-dashboard',[AdminController::class,'statistics'])->name('admin.dashboard');
     });
     Route::middleware(['auth', 'role:driver'])->group(function () {
         Route::get('/driver-dashboard', [DriverController::class, 'showRouteSelectionForm'])->name('driver.dashboard');
@@ -49,14 +52,15 @@ Route::get('/dashboard', [DashboardController::class, 'showDashboard'])
         Route::get('/passenger-dashboard', [PassengerController::class, 'index'])->name('passenger.dashboard');
     });
 
-
-
+    Route::post('/submit-rating/{reservation}', [PassengerController::class, 'submitRating'])->name('submit.rating');
+    Route::post('/submit-feedback/{reservation}', [PassengerController::class, 'submitFeedback'])->name('submit.feedback');
+    Route::post('/delete-reservation/{reservation}', [ReservationController::class, 'deleteReservation'])->name('delete.reservation');
 
     Route::put('/driver/update-route', [DriverController::class, 'updateRoute'])->name('driver.updateRoute');
     Route::post('/add-schedule', [DriverController::class, 'addSchedule'])->name('add.schedule'); 
 
-    Route::delete('/soft-delete-user/{id}', [AdminController::class, 'softDeleteUserAndRelated'])
-    ->name('soft.delete.user'); 
+    Route::delete('/delete-driver/{driverId}', [AdminController::class, 'deleteDriver'])->name('delete_driver');
+    Route::delete('/delete-passenger/{passengerId}', [AdminController::class, 'deletePassenger'])->name('delete_passenger');
     Route::post('/addPassenger',  [AdminController::class, 'addPassenger'])->name('add.passenger');
     Route::post('/addDriver', [AdminController::class, 'addDriver'])->name('add.driver');
     

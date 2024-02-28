@@ -13,6 +13,8 @@
         <link rel="stylesheet" href="https://unicons.iconscout.com/release/v2.1.9/css/unicons.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-Bz2O+asrSGSB5rH62Q5N/HLG2PhjZnLLeOLi21I4k+ojwpeImj1lZCMxqrB+iKS5bPkmtOfiO4OwG5fSvZpN8w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
 
       <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
     

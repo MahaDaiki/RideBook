@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Admin;
 use App\Models\Driver;
 use App\Models\Passenger;
+use App\Models\Reservations;
 use App\Models\Taxi;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -28,18 +29,40 @@ class AdminController extends Controller
         return view('UserManagement', compact( 'drivers','passengers'));
     }
 
-    public function softDeleteUserAndRelated($id)
+//     public function softDeleteUserAndRelated($id)
+// {
+//     dd($id);
+//     $user = User::withTrashed()->find($id);
+
+//     if ($user) {
+//         $user->delete();
+
+//         return redirect()->back()->with('success', 'User soft deleted successfully.');
+//     }
+
+//     return redirect()->back()->with('error', 'User not found.');
+// }
+public function deleteDriver($driverId)
 {
-    $user = User::withTrashed()->find($id);
+    $driver = Driver::findOrFail($driverId);
 
-    if ($user) {
-        $user->delete();
+        $driver->user->delete();
+    $driver->delete();
+    return redirect()->back()->with('success', 'Driver deleted successfully.');
 
-        return redirect()->back()->with('success', 'User soft deleted successfully.');
-    }
-
-    return redirect()->back()->with('error', 'User not found.');
+    
 }
+
+public function deletePassenger($passengerId)
+{
+    $passenger = Passenger::findOrFail($passengerId);
+        $passenger->user->delete();
+    $passenger->delete();
+    return redirect()->back()->with('success', 'Passanger deleted successfully.');
+
+    
+}
+
 public function addPassenger(Request $request)
 {
     
@@ -116,17 +139,16 @@ public function addDriver(Request $request)
 
 public function updatePassenger(Request $request, $id)
 {
-    // Add validation rules as needed
+    
     $request->validate([
         'name' => 'required|string|max:255',
         'phonenumber' => 'required|string|max:20',
         'email' => 'required|string|email|max:255|unique:users,email,' . $id,
-        // Add more validation rules as needed
+        
     ]);
 
     $user = User::findOrFail($id);
 
-    // Update user details
     $user->update([
         'name' => $request->input('name'),
         'phonenumber' => $request->input('phonenumber'),
@@ -136,35 +158,51 @@ public function updatePassenger(Request $request, $id)
     return redirect()->back()->with('success', 'Passenger details updated successfully');
 }
 
-// Update function for driver
+
 public function updateDriver(Request $request, $id)
 {
-    // Add validation rules as needed
+  
     $request->validate([
         'name' => 'required|string|max:255',
         'email' => 'required|string|lowercase|email|max:255|unique:users,email,' . $id,
-        // Add more validation rules as needed
+      
     ]);
 
     $user = User::findOrFail($id);
 
-    // Update user details
     $user->update([
         'name' => $request->input('name'),
         'email' => $request->input('email'),
     ]);
 
-    // Update driver-specific details
+  
     $driver = $user->driver;
     $driver->update([
         'Description' => $request->input('Description'),
         'Payment' => $request->input('Payment'),
-        // Add more fields as needed
+      
     ]);
 
     return redirect()->back()->with('success', 'Driver details updated successfully');
 }
 
+public function statistics()
+    {
+        $driverCount = Driver::count();
+        $reservationCount = Reservations::count();
+        $Earnings = Reservations::sum('price');
+
+    $reservationsPerDay = Reservations::selectRaw('Date as date, COUNT(*) as count')
+        ->groupBy('date')
+        ->orderBy('date')
+        ->get();
+        $taxi = taxi::get();
+       
+      
+        
+
+        return view('dashboardAdmin', compact('driverCount', 'reservationCount','taxi','Earnings','reservationsPerDay'));
+    }
     public function edit(Admin $admin)
     {
         //

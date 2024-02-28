@@ -134,6 +134,7 @@
     <div class="alert alert-danger">
         {{ session('error') }}
     </div>
+    
 @endif
 
                             @csrf
@@ -152,7 +153,7 @@
                             </select>
                           </div>
                             <input type="date" name="schedule" id="schedule" required>
-                            <input type="number" placeholder="Number Of People" required>
+                          
                             <div class="btm_input">
                               <button>Search</button>
                             </div>

@@ -25,6 +25,6 @@ class Routes extends Model
     }
     public function drivers()
     {
-        return $this->hasMany(Driver::class,'id');
+        return $this->hasMany(Driver::class,'Route_id', 'id');
     }
 }

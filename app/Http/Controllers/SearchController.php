@@ -77,5 +77,25 @@ $driverScheduleId = $driverSchedule->id;
 }
     
     
+public function search(Request $request){
+    $search = $request->search;
+    $route = $request->input('route');
+    $driverscheduleid = $request->input('driverscheduleid');
+   
 
+    $driverAndTaxiData = Driver::Wherehas('taxi', function ($query) use ($search) {
+        $query->where('Vehicle_Type', 'like', "%$search%");
+    })
+    ->WhereHas('routes', function ($query) use ($route) {
+        $query->where('id', '=', "%$route%");
+        
+    })
+    ->WhereHas('driverSchedules', function ($query) use ($driverscheduleid) {
+        $query->where('id', '=', "%$driverscheduleid%");
+    })
+    
+    ->get();
+   
+    return view('SearchResults', compact('driverAndTaxiData', 'search'));
+}
 }
