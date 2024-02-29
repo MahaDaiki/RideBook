@@ -63,6 +63,7 @@ Route::get('/dashboard', [DashboardController::class, 'showDashboard'])
     Route::delete('/delete-passenger/{passengerId}', [AdminController::class, 'deletePassenger'])->name('delete_passenger');
     Route::post('/addPassenger',  [AdminController::class, 'addPassenger'])->name('add.passenger');
     Route::post('/addDriver', [AdminController::class, 'addDriver'])->name('add.driver');
+    Route::patch('/modify-schedule', [DriverController::class, 'modifySchedule'])->name('modify.schedule');
     
 
 

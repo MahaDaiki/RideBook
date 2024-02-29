@@ -1,4 +1,13 @@
 <x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 bg-warning">
+            <div class="text-center d-flex justify-center items-center">
+                <img src="{{  asset(Auth::user()->profilepicture)}}" alt="Profile Picture" class="rounded-circle shadow" width="200" height="200">
+                <h3 class="ml-3"> {{ Auth::user()->name }} </h3>
+            </div>
+          
+        </h2>
+    </x-slot>
     <div id="wrapper">
 
         <!-- Sidebar -->

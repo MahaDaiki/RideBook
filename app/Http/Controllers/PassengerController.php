@@ -26,10 +26,16 @@ class PassengerController extends Controller
       
     // $startCityName = $route->startCity->name;
     // $destinationCityName = $route->endCity->name;
+
     
  
 } 
+// $mostReservedRoute = $user->driver->route()
+//     ->withCount('reservations')
+//     ->orderByDesc('reservations_count')
+//     ->first();
 
+// dd($mostReservedRoute);
    return view('dashboardPassenger', compact('reservations'));
     }
     public function submitRating(Request $request, Reservations $reservation)

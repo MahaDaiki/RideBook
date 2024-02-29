@@ -77,25 +77,39 @@ $driverScheduleId = $driverSchedule->id;
 }
     
     
-public function search(Request $request){
-    $search = $request->search;
-    $route = $request->input('route');
-    $driverscheduleid = $request->input('driverscheduleid');
+public function search(Request $request) {
+  
    
-
-    $driverAndTaxiData = Driver::Wherehas('taxi', function ($query) use ($search) {
-        $query->where('Vehicle_Type', 'like', "%$search%");
-    })
-    ->WhereHas('routes', function ($query) use ($route) {
-        $query->where('id', '=', "%$route%");
-        
-    })
-    ->WhereHas('driverSchedules', function ($query) use ($driverscheduleid) {
-        $query->where('id', '=', "%$driverscheduleid%");
-    })
+        $search = $request->input('search');
+        $route = $request->input('route');
+        $driverscheduleid = $request->input('driverscheduleid');
     
-    ->get();
-   
-    return view('SearchResults', compact('driverAndTaxiData', 'search'));
-}
+        // $driverAndTaxiData = Driver::whereHas('taxi', function ($query) use ($search) {
+        //         $query->where('Vehicle_Type', 'like', "%$search%");dd($query);
+        //     })
+        //     ->whereHas('routes', function ($query) use ($route) {
+        //         $query->where('id', '=', $route);
+        //     })
+        //     ->whereHas('driverSchedules', function ($query) use ($driverscheduleid) {
+        //         $query->where('id', '=', $driverscheduleid);
+        //     })
+        //     ->get();
+        // $driverAndTaxiData = Driver::join('taxi', 'driver.taxi_id', '=', 'taxi.id')
+        // ->where('taxi.Vehicle_Type', 'like', "%$search")
+        // ->where('driver.route_id', $route)
+        // ->where('driver_schedule.id', '=', $driverscheduleid)
+        // ->get();
+        $driverAndTaxiData = Driver::join('taxi', 'driver.taxi_id', '=', 'taxi.id')
+        ->join('driver_schedule', 'driver_schedule.driver_id', '=', 'driver.id')
+        ->where('taxi.Vehicle_Type', 'like', "%$search%")
+        ->where('driver.route_id', $route)
+        ->where('driver_schedule.id', '=', $driverscheduleid)
+        ->whereNull('driver.deleted_at')
+        ->select('driver.*') 
+        ->get();
+        return view('SearchResults', compact('driverAndTaxiData', 'search'));
+    }
+    
+    
+    
 }

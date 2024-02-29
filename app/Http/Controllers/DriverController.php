@@ -85,7 +85,23 @@ public function updateRoute(Request $request,)
      
         return redirect()->back()->with('success', 'Schedule added successfully');
     }
+    public function modifySchedule(Request $request)
+    {
+        
+        $request->validate([
+            'schedule_id' => 'required|exists:driver_schedule,id',
+            'isDone' => 'required',
+        ]);
 
+        $schedule = DriverSchedules::findOrFail($request->input('schedule_id'));
+
+        $schedule->update([
+            'isDone' => $request->input('isDone'),
+        ]);
+
+        
+        return redirect()->back()->with('success', 'Schedule updated successfully');
+    }
     /**
      * Store a newly created resource in storage.
      */

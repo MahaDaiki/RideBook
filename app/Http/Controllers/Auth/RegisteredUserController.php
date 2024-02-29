@@ -45,12 +45,13 @@ class RegisteredUserController extends Controller
             'phonenumber' => ['required', 'numeric'],
             'role' => ['required', 'in:' . $roles->pluck('name')->implode(',')],
         ]);
-    
+        $imageName = time() . '.' . $request->file('profilepicture')->getClientOriginalExtension();
+$request->file('profilepicture')->move(public_path('Images'), $imageName);
         $user = User::create([
             'name' => $request->input('name'),
             'email' => $request->input('email'),
             'password' => Hash::make($request->input('password')),
-            'profilepicture' => $request->file('profilepicture')->store('app/public/Images', 'public'), 
+            'profilepicture' => 'Images/' . $imageName,
             'phonenumber' => $request->input('phonenumber'),
         ]);
     

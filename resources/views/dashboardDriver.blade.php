@@ -4,7 +4,7 @@
         <x-slot name="header">
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 bg-warning">
                 <div class="text-center d-flex justify-center items-center">
-                    <img src="{{  Auth::user()->profile_picture }}" alt="Profile Picture" class="rounded-circle shadow" width="200" height="200">
+                    <img src="{{  asset(Auth::user()->profile_picture) }}" alt="Profile Picture" class="rounded-circle shadow" width="200" height="200">
                     <h3 class="ml-3"> {{ Auth::user()->name }} </h3>
                 </div>
                 <p class="text-center">{{ $driver->Description }}</p>
@@ -71,23 +71,63 @@
         </div>
         <div class="card container text-center d-flex mt-4 mb-5">
             <div class="mt-4">
-                <h4>Chosen Route:</h4>
+                <h4>Chosen Schedules:</h4>
                 @if ($schedules->count() > 0)
-        <ul>
-            @foreach ($schedules as $driverSchedule)
-                <li>{{ $driverSchedule->schedule->date }} - Status: {{ $driverSchedule->isDone }}</li>
-            @endforeach
-        </ul>
-    @else
-        <p>No schedules available for the driver.</p>
-    @endif
-            
-      
-            <button type="button" class="btn btn-success float-right mr-5 " data-toggle="modal" data-target="#addScheduleModal">
-                Add Schedule
-            </button>
+                    <ul>
+                        @foreach ($schedules as $driverSchedule)
+                            <li>{{ $driverSchedule->schedule->date }} - Status: {{ $driverSchedule->isDone }}
+                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modifyScheduleModal_{{ $driverSchedule->id }}">
+                                    Modify
+                                </button>
+                            </li>
+        
+                            <!-- Modal for each schedule -->
+                            <div class="modal fade" id="modifyScheduleModal_{{ $driverSchedule->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Modify Schedule</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <form method="POST" action="{{ route('modify.schedule') }}">
+                                            @csrf
+                                            @method('PATCH')
+                                            <div class="modal-body">
+                                                <input type="hidden" name="schedule_id" value="{{ $driverSchedule->id }}">
+                                                <div class="form-group">
+                                                    <label for="isDone">Status:</label>
+                                                    <select name="isDone" id="isDone" class="form-control" required>
+                                                        <option value="Done">Done</option>
+                                                        <option value="Waiting">Waiting</option>
+                                                        <option value="Cancelled">Cancelled</option>
+                                                    </select>
+                                                    <div class="invalid-feedback">
+                                                        Please select a status.
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                <button type="submit" class="btn btn-primary">Save Changes</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </ul>
+                @else
+                    <p>No schedules available for the driver.</p>
+                @endif
+        
+                <button type="button" class="btn btn-success float-right mr-5 " data-toggle="modal" data-target="#addScheduleModal">
+                    Add Schedule
+                </button>
+            </div>
         </div>
-        </div>
+        
 
             <div class="modal fade" id="addScheduleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">

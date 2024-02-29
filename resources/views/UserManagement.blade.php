@@ -185,16 +185,17 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                       
-                                        {{-- @foreach ($drivers as $driver)
+                                     
+                                        @foreach ($drivers as $driver)
                                         <tr>
-                                            <td>{{ $driver->user->name }}</td>
-                                            <td>{{ $driver->user->email }}</td> 
-                                            <td>{{ $driver->user->phonenumber}}</td>
+                                            <td>{{ optional($driver->user)->name }}</td>
+                                            <td>{{ optional($driver->user)->email }}</td>
+                                            <td>{{ optional($driver->user)->phonenumber }}</td>
                                             <td>{{ $driver->Description }}</td>
                                             <td>{{ $driver->payment }}</td>
-                                            <td>{{ $driver->taxi_id }}</td> --}}
-                                            {{-- <td>            <form action="{{ route('delete_driver', ['driverId' => $driver->id]) }}" method="post">
+                                            <td>{{ $driver->taxi_id }}</td>
+                                             <td>          
+                                                  <form action="{{ route('delete_driver', ['driverId' => $driver->id]) }}" method="post">
                                                 @csrf
                                                 @method('delete')
                                                 <button type="submit" class="btn btn-danger">Delete</button>
@@ -202,7 +203,7 @@
                                            
                                 </td>
                                         </tr>
-                                    @endforeach --}}
+                                    @endforeach
 
                                       
                                       
